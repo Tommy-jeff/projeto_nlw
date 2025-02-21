@@ -23,7 +23,7 @@ def test_select_subscriber():
     print(f"\nconsulta: {subs}")
     print(f"\nconsulta nome: {subs.nome}")
 
-# @pytest.mark.skip("Delete in db")
+@pytest.mark.skip("Delete in db")
 def test_delete_subscriber():
     subscribe_id = 2
 
