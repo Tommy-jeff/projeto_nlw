@@ -1,6 +1,7 @@
 from src.model.configs.connection import DbConnectionHandler
 from src.model.entities.inscritos import Inscritos
 from .interfaces.subscribes_repository_inteface import SubscribersRepositoryInterface
+from sqlalchemy import func, desc
 
 class SubscribersRepository(SubscribersRepositoryInterface):
     def insert(self, subscriber_info: dict) -> None:
@@ -27,6 +28,36 @@ class SubscribersRepository(SubscribersRepositoryInterface):
                     Inscritos.evento_id == evento_id)
                 .limit(1)
                 .one_or_none()
+            )
+
+            return data
+        
+    def select_subscribers_by_link(self, link: str, evento_id: int) -> list:
+        with DbConnectionHandler() as db:
+            data = (
+                db.session.query(Inscritos)
+                .filter(
+                    Inscritos.link == link,
+                    Inscritos.evento_id == evento_id)
+                    .all()
+            )
+
+            return data
+        
+    def get_ranking(self, evento_id: int) -> list:
+        with DbConnectionHandler() as db:
+            data = (
+                db.session.query(
+                    Inscritos.link, 
+                    func.count(Inscritos.id).label("total")
+                    )
+                .filter(
+                    Inscritos.evento_id == evento_id,
+                    Inscritos.link.isnot(None)
+                    )
+                .group_by(Inscritos.link)
+                .order_by(desc("total"))
+                .all()
             )
 
             return data

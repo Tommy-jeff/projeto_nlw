@@ -23,9 +23,20 @@ def test_select_subscriber():
     print(f"\nconsulta: {subs}")
     print(f"\nconsulta nome: {subs.nome}")
 
+@pytest.mark.skip("Select link ranking in db")
+def test_select_ranking_subscriber():
+    evento_id = 1
+
+    subs_repo = SubscribersRepository()
+    subs = subs_repo.get_ranking(evento_id)
+
+    print()
+    for elem in subs:
+        print(f"link: {elem.link} - inscrições: {elem.total}")
+
 @pytest.mark.skip("Delete in db")
 def test_delete_subscriber():
-    subscribe_id = 2
+    subscribe_id = 6
 
     subs_repo = SubscribersRepository()
     subs_repo.delete_subscriber(subscribe_id)

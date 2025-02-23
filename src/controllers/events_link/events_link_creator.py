@@ -12,21 +12,21 @@ class EventsLinkCreator:
        subs_id = events_link_info["inscrito_id"]
 
        self.__check_event(event_id, subs_id)
-       event_link = self.__insert_event(event_id, subs_id)
+       event_link = self.__insert_event_link(event_id, subs_id)
        return self.__format_response(event_link)
 
     def __check_event(self, event_id: int, subs_id: int) -> None:
         response = self.__events_link_repo.select_event_link(event_id, subs_id)
         if response: raise Exception("Event link Already exists!")
 
-    def __insert_event(self, event_id: int, subs_id: int) -> int:
+    def __insert_event_link(self, event_id: int, subs_id: int) -> int:
         event_link = self.__events_link_repo.insert(event_id, subs_id)
         return event_link
     def __format_response(self, event_link: str) -> HttpResponse:
         return HttpResponse(
             body={
                 "data": {
-                    "Type": "Event_link",
+                    "Type": "Event link",
                     "count": 1,
                     "attibutes": {
                         "event_link": event_link
